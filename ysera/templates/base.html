@@ -1,0 +1,619 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Ysera - {% block title %}{% endblock title %}</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static "images/favicon.png" %}" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/bootstrap.min.css"  %}">
+    <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/owl.carousel.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/animate.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/jquery-ui.css" %}">
+    <link rel="stylesheet" href="{% static "css/slick.css" %}">
+    <link rel="stylesheet" href="{% static "css/chosen.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/pe-icon-7-stroke.css" %}">
+    <link rel="stylesheet" href="{% static "css/magnific-popup.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/lightbox.min.css" %}">
+    <link rel="stylesheet" href="{% static "js/fancybox/source/jquery.fancybox.css" %}">
+    <link rel="stylesheet" href="{% static "css/jquery.scrollbar.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/mobile-menu.css" %}">
+    <link rel="stylesheet" href="{% static "fonts/flaticon/flaticon.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+</head>
+
+<body class="home">
+
+    <header class="header style7">
+        {% if log == '1' %}
+        <div class="top-bar">
+            <div class="container">
+                <div class="top-bar-left">
+                    <div class="header-message">
+                        Welcome to our online store!
+                    </div>
+                </div>
+
+                <ul class="header-user-links">
+                    <li>
+                        <a href="{% url "login" %}">Login or Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="container">
+            <div class="main-header">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-4 col-md-3 col-xs-7 col-ts-12 header-element">
+                        <div class="logo">
+                            <a href="{% url "home" %}">
+                                <img src="{% static "images/logo.png"  %}" alt="img">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-sm-8 col-md-6 col-xs-5 col-ts-12">
+                        <div class="block-search-block">
+                            <form class="form-search form-search-width-category">
+                                <div class="form-content">
+                                    <div class="category">
+                                        <select title="cate" data-placeholder="All Categories" class="chosen-select"
+                                            tabindex="1">
+                                            <option value="United States">Rings</option>
+                                            <option value="United Kingdom">Bracelets</option>
+                                            <option value="Afghanistan">Necklace</option>
+                                            <option value="Aland Islands">Earring</option>
+                                            <option value="Albania">Bangles</option>
+                                            <option value="Algeria">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="inner">
+                                        <input type="text" class="input" name="s" value="" placeholder="Search here">
+                                    </div>
+                                    <button class="btn-search" type="submit">
+                                        <span class="icon-search"></span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-12 col-md-3 col-xs-12 col-ts-12">
+                        <div class="header-control">
+                            <div class="block-minicart ysera-mini-cart block-header ysera-dropdown">
+                                <a href="javascript:void(0);" class="shopcart-icon" data-ysera="ysera-dropdown">
+                                    Cart
+                                    <span class="count">
+                                        0
+                                    </span>
+                                </a>
+                                <div class="no-product ysera-submenu">
+                                    <p class="text">
+                                        You have
+                                        <span>
+                                            0 item(s)
+                                        </span>
+                                        in your bag
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="block-account block-header ysera-dropdown">
+                                <a href="javascript:void(0);" data-ysera="ysera-dropdown">
+                                    <span class="flaticon-user"></span>
+                                </a>
+                                <div class="header-account ysera-submenu">
+                                    <div class="header-user-form-tabs">
+                                        <ul class="tab-link">
+                                            <li class="active">
+                                                <a data-toggle="tab" aria-expanded="true"
+                                                    href="{% url "login" %}">Login</a>
+                                            </li>
+                                            <li>
+                                                <a data-toggle="tab" aria-expanded="true"
+                                                    href="{% url "login" %}">Register</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-container">
+                                            <div id="header-tab-login" class="tab-panel active">
+                                                <form method="post" class="login form-login">
+                                                    <p class="form-row form-row-wide">
+                                                        <input type="email" placeholder="Email" class="input-text">
+                                                    </p>
+                                                    <p class="form-row form-row-wide">
+                                                        <input type="password" class="input-text"
+                                                            placeholder="Password">
+                                                    </p>
+                                                    <p class="form-row">
+                                                        <label class="form-checkbox">
+                                                            <input type="checkbox" class="input-checkbox">
+                                                            <span>
+                                                                Remember me
+                                                            </span>
+                                                        </label>
+                                                        <input type="submit" class="button" value="Login">
+                                                    </p>
+                                                    <p class="lost_password">
+                                                        <a href="#">Lost your password?</a>
+                                                    </p>
+                                                </form>
+                                            </div>
+                                            <div id="header-tab-rigister" class="tab-panel">
+                                                <form method="post" class="register form-register">
+                                                    <p class="form-row form-row-wide">
+                                                        <input type="email" placeholder="Email" class="input-text">
+                                                    </p>
+                                                    <p class="form-row form-row-wide">
+                                                        <input type="password" class="input-text"
+                                                            placeholder="Password">
+                                                    </p>
+                                                    <p class="form-row">
+                                                        <input type="submit" class="button" value="Register">
+                                                    </p>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="menu-bar mobile-navigation menu-toggle" href="#">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-nav-container">
+            <div class="container">
+                <div class="header-nav-wapper main-menu-wapper">
+                    <div class="vertical-wapper block-nav-categori">
+                        <div class="block-title">
+                            <span class="icon-bar">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span class="text">All Categories</span>
+                        </div>
+                        <div class="block-content verticalmenu-content">
+                            <ul class="ysera-nav-vertical vertical-menu ysera-clone-mobile-menu">
+
+
+                                <li class="menu-item menu-item-has-children">
+                                    <a title="Accessories" href="#" class="ysera-menu-item-title">Categories</a>
+                                    <span class="toggle-submenu"></span>
+                                    <ul role="menu" class=" submenu">
+                                        <li class="menu-item">
+                                            <a title="Nacklace" href="{% url "search" s='0' page='1' %}?q=Necklace" class="ysera-item-title">Necklace</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a title="Bracelets" href="{% url "search" s='0' page='1' %}?q=Bracelets" class="ysera-item-title">Bracelets</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a title="Bangles" href="{% url "search" s='0' page='1' %}?q=Bangles" class="ysera-item-title">Bangles</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a title="Earrings" href="{% url "search" s='0' page='1' %}?q=Earring" class="ysera-item-title">Earring</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a title="Rings" href="{% url "search" s='0' page='1' %}?q=Rings" class="ysera-item-title">Rings</a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a title="Other" href="{% url "search" s='0' page='1' %}?q=" class="ysera-item-title">Other</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="header-nav">
+                        <div class="container-wapper">
+                            <ul class="ysera-clone-mobile-menu ysera-nav main-menu " id="menu-main-menu">
+                                <li class="menu-item">
+                                    <a href="{% url "home" %}" class="ysera-menu-item-title" title="Home">Home</a>
+                                </li>
+
+
+                                <li class="menu-item menu-item-has-children">
+                                    <a href="#" class="ysera-menu-item-title" title="Shop">Necklaces</a>
+                                    <span class="toggle-submenu"></span>
+                                    <ul class="submenu">
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Types</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Short Necklaces">Short Necklaces</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Hauram">Hauram</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Chockers">Chockers</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Layered Necklaces">Layered Necklaces</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Pendant Set">Pendant Set</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Collection</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Antique">Antique</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Kundan">Kundan</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Temple">Temple</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Zircon">Zircon</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Occasion</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Bridal">Bridal</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Party">Party</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Casual">Casual</a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="menu-item menu-item-has-children">
+                                    <a href="{% url "search" s='0' page='1' %}?q=Earring" class="ysera-menu-item-title" title="Shop">Earring</a>
+                                    <span class="toggle-submenu"></span>
+                                    <ul class="submenu">
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Types</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Jhumkas">Jhumkas</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Studs">Studs</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Danglers">Danglers</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Chandliers">Chandliers</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Hoops">Hoops</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Collection</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Antique">Antique</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Kundan">Kundan</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Temple">Temple</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Zircon">Zircon</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Occasion</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Bridal">Bridal</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Party">Party</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Casual">Casual</a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="menu-item menu-item-has-children">
+                                    <a href="{% url "search" s='0' page='1' %}?q=" class="ysera-menu-item-title" title="Shop">Bangles</a>
+                                    <span class="toggle-submenu"></span>
+                                    <ul class="submenu">
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Types</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Kadas">Kadas</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Single Bangle">Single Bangle</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Pair Bangles">Pair Bangles</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Glass Bangle">Glass Bangle</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Collection</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Antique">Antique</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Kundan">Kundan</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Temple">Temple</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Zircon">Zircon</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="menu-item menu-item-has-children">
+                                            <a href="#" class="ysera-menu-item-title" title="Blog Style">Shop by
+                                                Occasion</a>
+                                            <span class="toggle-submenu"></span>
+                                            <ul class="submenu">
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Bridal">Bridal</a>
+                                                </li>
+                                                <li class="menu-item">
+                                                    <a href="{% url "search" s='0' page='1' %}?q=Casual">Casual</a>
+                                                </li>
+
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="about.html" class="ysera-menu-item-title" title="About">About</a>
+                                </li>
+
+                                <li class="menu-item">
+                                    <a href="contact.html" class="ysera-menu-item-title" title="About">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="header-device-mobile">
+        <div class="wapper">
+            <div class="item mobile-logo">
+                <div class="logo">
+                    <a href="#">
+                        <img src="{% static "images/logo.png" %}" alt="img">
+                    </a>
+                </div>
+            </div>
+            <div class="item item mobile-search-box has-sub">
+                <a href="#">
+                    <span class="icon">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </span>
+                </a>
+                <div class="block-sub">
+                    <a href="#" class="close">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    </a>
+                    <div class="header-searchform-box">
+                        <form class="header-searchform">
+                            <div class="searchform-wrap">
+                                <input type="text" class="search-input" placeholder="Enter keywords to search...">
+                                <input type="submit" class="submit button" value="Search">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item menu-bar">
+                <a class=" mobile-navigation  menu-toggle" href="#">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% block index %}
+    {% endblock index %}
+<footer class="footer style7">
+    <div class="container">
+        <div class="container-wapper">
+            <div class="row">
+                <!-- Column 1: Company Info -->
+                <div class="box-footer col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <div class="ysera-custommenu default">
+                        <h2 class="widgettitle">Tara Trinkets</h2>
+                        <div class="company-description">
+                            <p>Your premier destination for exquisite bridal, fashion, and occasional jewellery. Each piece is crafted for elegance and timeless beauty.</p>
+                        </div>
+                        <div class="contact-info">
+                            <p><i class="fa fa-phone"></i> 9788006962</p>
+                            <p><i class="fa fa-envelope"></i> tharatrinket@gmail.com</p>
+                        </div>
+                        <div class="ysera-socials">
+                            <h3>Follow Us</h3>
+                            <ul class="socials">
+                                <li><a href="#" class="social-item" title="Facebook"><i class="icon fa fa-facebook"></i></a></li>
+                                <li><a href="#" class="social-item" title="Instagram"><i class="icon fa fa-instagram"></i></a></li>
+                                <li><a href="#" class="social-item" title="Pinterest"><i class="icon fa fa-pinterest"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Quick Links -->
+                <div class="box-footer col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                    <div class="ysera-custommenu default">
+                        <h2 class="widgettitle">Quick Links</h2>
+                        <ul class="menu">
+                            <li class="menu-item"><a href="#">Home</a></li>
+                            <li class="menu-item"><a href="#">About Us</a></li>
+                            <li class="menu-item"><a href="#">Store</a></li>
+                            <li class="menu-item"><a href="#">Contact</a></li>
+                            <li class="menu-item"><a href="#">Privacy Policy</a></li>
+                            <li class="menu-item"><a href="#">Return/Refund</a></li>
+                            <li class="menu-item"><a href="#">Shipping</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Column 3: Categories -->
+                <div class="box-footer col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="ysera-custommenu default">
+                        <h2 class="widgettitle">Shop By</h2>
+                        <ul class="menu">
+                            <li class="menu-item"><a href="#">Bridal Jewellery</a></li>
+                            <li class="menu-item"><a href="#">Fashion Jewellery</a></li>
+                            <li class="menu-item"><a href="#">Occasional</a></li>
+                            <li class="menu-item"><a href="#">Necklaces</a></li>
+                            <li class="menu-item"><a href="#">Earrings</a></li>
+                            <li class="menu-item"><a href="#">Bracelets</a></li>
+                            <li class="menu-item"><a href="#">New Arrivals</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-end">
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="secure-shopping">
+                            <span class="badge"><i class="fa fa-lock"></i> Secure Payment</span>
+                            <span class="badge"><i class="fa fa-truck"></i> Free Shipping</span>
+                            <span class="badge"><i class="fa fa-undo"></i> Easy Returns</span>
+                        </div>
+                        <div class="coppyright">
+                            © 2025 <a href="#">Tara Trinkets</a>. All rights reserved. 
+                            <span class="dev-credit">Site by <a href="https://zapwaves.com" target="_blank">zapwaves</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Mobile Footer Navigation (unchanged) -->
+<div class="footer-device-mobile">
+    <div class="wapper">
+        <div class="footer-device-mobile-item device-home">
+            <a href="{% url "home" %}">
+                <span class="icon">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                </span>
+                Home
+            </a>
+        </div>
+        <div class="footer-device-mobile-item device-home device-wishlist">
+            <a href="#">
+                <span class="icon">
+                    <i class="fa fa-heart" aria-hidden="true"></i>
+                </span>
+                Wishlist
+            </a>
+        </div>
+        <div class="footer-device-mobile-item device-home device-cart">
+            <a href="#">
+                <span class="icon">
+                    <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                    <span class="count-icon">0</span>
+                </span>
+                <span class="text">Cart</span>
+            </a>
+        </div>
+        <div class="footer-device-mobile-item device-home device-user">
+            <a href="login.html">
+                <span class="icon">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                </span>
+                Account
+            </a>
+        </div>
+    </div>
+</div>
+<a href="#" class="backtotop">
+    <i class="fa fa-angle-double-up"></i>
+</a>
+    <script src="{% static "js/jquery-1.12.4.min.js"  %}"></script>
+    <script src="{% static "js/jquery.plugin-countdown.min.js" %}"></script>
+    <script src="{% static "js/jquery-countdown.min.js" %}"></script>
+    <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/owl.carousel.min.js" %}"></script>
+    <script src="{% static "js/magnific-popup.min.js" %}"></script>
+    <script src="{% static "js/isotope.min.js" %}"></script>
+    <script src="{% static "js/jquery.scrollbar.min.js" %}"></script>
+    <script src="{% static "js/jquery-ui.min.js" %}"></script>
+    <script src="{% static "js/mobile-menu.js" %}"></script>
+    <script src="{% static "js/chosen.min.js" %}"></script>
+    <script src="{% static "js/slick.js" %}"></script>
+    <script src="{% static "js/jquery.elevatezoom.min.js" %}"></script>
+    <script src="{% static "js/jquery.actual.min.js" %}"></script>
+    <script src="{% static "js/fancybox/source/jquery.fancybox.js" %}"></script>
+    <script src="{% static "js/lightbox.min.js" %}"></script>
+    <script src="{% static "js/owl.thumbs.min.js" %}"></script>
+    <script src="{% static "js/jquery.scrollbar.min.js" %}"></script>
+    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
+    <script src="{% static "js/frontend-plugin.js" %}"></script>
+</body>
+
+</html>

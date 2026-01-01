@@ -1,0 +1,891 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+{% block index %}
+    <div class="main-content">
+        <div class="fullwidth-template">
+            <div class="home-slider style1 rows-space-30">
+                <div class="container">
+                    <div class="slider-owl owl-slick equal-container nav-center"
+                        data-slick='{"autoplay":true, "autoplaySpeed":9000, "arrows":true, "dots":false, "infinite":true, "speed":1000, "rows":1}'
+                        data-responsive='[{"breakpoint":"2000","settings":{"slidesToShow":1}}]'>
+                        {% if offers_1 %}
+                        {% for offer_1 in offers_1  %}
+                        <!-- Slide 1 FIRST OFFER-->
+                        <div class="slider-item style1">
+                            <div class="slider-inner equal-element">
+
+                                <img class="slider-bg-img" src="{{ offer_1.image.url }}" alt="{{ offer_1.title }}">
+
+                                <div class="slider-infor">
+                                    <h5 class="title-small">{{ offer_1.title }}</h5>
+                                    <h3 class="title-big">
+                                        <br/>{{ offer_1.descripton }}
+                                    </h3>
+                                    <div class="price">
+                                        Price from:
+                                        <span class="number-price">{{ offer_1.offers }}</span>
+                                    </div>
+                                    <a href="{% url "search" s="0" page="1" %}?q={{offer_1.offer_applies_to}}" class="button btn-shop-the-look bgroud-style">Shop now</a>
+                                </div>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <style>
+            .two-grid-mobile {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                gap: 6px;
+                /* remove spacing */
+                scroll-behavior: smooth;
+                padding-bottom: 10px;
+            }
+
+            /* remove bootstrap default gutter padding */
+            .two-grid-mobile>div[class*="col"] {
+                padding: 5px !important;
+            }
+
+            /* optional - remove container gap */
+            .banner-video-wrapp .container {
+                padding: 4px !important;
+            }
+
+            /* Each banner fixed width (keeps ratio perfect) */
+            .two-grid-mobile>div {
+                flex: 0 0 70%;
+                /* mobile width: 70% of screen */
+                max-width: 70%;
+            }
+
+            /* On desktop, show 2 per row */
+            @media(min-width: 992px) {
+                .two-grid-mobile>div {
+                    flex: 0 0 50%;
+                    max-width: 50%;
+                }
+            }
+
+            /* Keep banner image ratio perfect */
+            .item-banner {
+                background-size: cover !important;
+                background-position: center !important;
+                background-repeat: no-repeat !important;
+            }
+
+            /* FIX banner border-radius visibility */
+            .banner,
+            .item-banner,
+            .item-banner .inner {
+                border-radius: 12px;
+                overflow: hidden;
+                /* 👈 THIS is the key */
+            }
+
+            /* Product grid container */
+            .ysera-tabs .product-grid {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            /* FORCE 2 products per row on mobile */
+            .ysera-tabs .product-grid>li {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+
+            /* Desktop keeps original layout */
+            @media (min-width: 992px) {
+                .ysera-tabs .product-grid>li {
+                    flex: 0 0 25%;
+                    max-width: 25%;
+                }
+            }
+
+            /* Product card radius */
+            .ysera-tabs .product-inner {
+                border-radius: 14px;
+                overflow: hidden;
+                /* important */
+            }
+
+            /* Image radius */
+            .ysera-tabs .product-thumb,
+            .ysera-tabs .thumb-inner,
+            .ysera-tabs .product-thumb img {
+                border-radius: 14px;
+            }
+
+            /* Smooth visual polish */
+            .ysera-tabs .product-item {
+                padding: 8px;
+            }
+
+            /* Optional hover refinement */
+            .ysera-tabs .product-inner:hover {
+                transform: translateY(-3px);
+                transition: 0.25s ease;
+            }
+        </style>
+        <div class="banner-video-wrapp rows-space-40 type2">
+            <div class="container">
+                <div class="row no-gutters two-grid-mobile">
+                    <!-- offer_2 -->
+                    {% if offers_2 %}
+                    {% for offer_2 in offers_2  %}
+                    <div class="col-6 col-sm-6 col-md-6 col-lg-6">
+                        <div class="banner">
+                            <div class="item-banner style9" style="background-image: url({{offer_2.image.url}});">
+                                <div class="inner" style="background-image: url({{offer_2.image.url}});">
+                                    
+                                    <div class="banner-content">
+                                        <h4 class="ysera-subtitle">{{ offer_2.title }}</h4>
+                                        <h3 class="title"><br />{{ offer_2.descripton}}</h3>
+                                        <div class="code"> Use promo Code: <span class="nummer-code">{{ offer_2.offers}}</span> </div>
+                                        <a href="{% url "search" s="0" page="1" %}?q={{offer_2.offer_applies_to}}" class="button btn-shop-now">Shop now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ysera-tabs  default rows-space-40">
+            <div class="container">
+                <div class="tab-head">
+                    <ul class="tab-link">
+                        <li class="active">
+                            <a data-toggle="tab" aria-expanded="true" href="#bestseller">Bestseller</a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" aria-expanded="true" href="#new_arrivals">New Arrivals </a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" aria-expanded="true" href="#top-rated">Top Rated</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-container">
+                    <div id="bestseller" class="tab-panel active">
+                        <div class="ysera-product">
+                            <!--bestsellers-->
+                            <ul class="row list-products auto-clear equal-container product-grid">
+                                {% if bestseller_products %}
+                                {% for bestseller in bestseller_products %}
+                                <li class="product-item  col-lg-3 col-md-4 col-sm-6 col-xs-6 col-ts-12 style-1">
+                                    <div class="product-inner equal-element">
+                                        <div class="product-top">
+                                            {% if bestseller.new == 'yes' %}
+                                            <div class="flash">
+                                                <span class="onnew">
+                                                    
+                                                    <span class="text">
+                                                        new
+                                                    </span>
+                                                    
+                                                </span>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-thumb">
+                                            <div class="thumb-inner">
+                                                <a href="{% url "product" p=bestseller.slug %}">
+                                                    <img src="{{ bestseller.image_url }}" alt="{{bestseller.p_name}}">
+                                                </a>
+                                                <div class="thumb-group">
+                                                    <div class="yith-wcwl-add-to-wishlist">
+                                                        <div class="yith-wcwl-add-button">
+                                                            <a href="#">Add to Wishlist</a>
+                                                        </div>
+                                                    </div>
+                                                    <a href="#" class="button quick-wiew-button">Quick View</a>
+                                                    <div class="loop-form-add-to-cart">
+                                                        <button class="single_add_to_cart_button button">Add to cart
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name product_title">
+                                                <a href="{% url "product" p=bestseller.slug %}">{{bestseller.p_name}}</a>
+                                            </h5>
+                                            <div class="group-info">
+
+                                                <div class="price">
+                                                    <del>
+                                                        Rs.{{bestseller.del_price}}
+                                                    </del>
+                                                    <ins>
+                                                        Rs.{{bestseller.price}}
+                                                    </ins>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="new_arrivals" class="tab-panel">
+                        <div class="ysera-product">
+                            <ul class="row list-products auto-clear equal-container product-grid">
+                                <!--newarrivals-->
+                                {% if newarrivals_products %}
+                                {% for newarrivals in newarrivals_products  %}
+                                <li class="product-item  col-lg-3 col-md-4 col-sm-6 col-xs-6 col-ts-12 style-1">
+                                    <div class="product-inner equal-element">
+                                        <div class="product-top">
+                                            {% if newarrivals.new == 'yes' %}
+                                            <div class="flash">
+                                                <span class="onnew">
+                                                    <span class="text">
+                                                        new
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-thumb">
+                                            <div class="thumb-inner">
+                                                <a href="{% url "product" p=newarrivals.slug %}">
+                                                    <img src="{{newarrivals.image_url}}" alt="{{newarrivals.p_name}}">
+                                                </a>
+                                                <div class="thumb-group">
+                                                    <div class="yith-wcwl-add-to-wishlist">
+                                                        <div class="yith-wcwl-add-button">
+                                                            <a href="#">Add to Wishlist</a>
+                                                        </div>
+                                                    </div>
+                                                    <a href="#" class="button quick-wiew-button">Quick View</a>
+                                                    <div class="loop-form-add-to-cart">
+                                                        <button class="single_add_to_cart_button button">Add to cart
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name product_title">
+                                                <a href="{% url "product" p=newarrivals.slug %}">{{newarrivals.p_name}}</a>
+                                            </h5>
+                                            <div class="group-info">
+                                                <div class="price">
+                                                    <del>
+                                                        Rs.{{newarrivals.del_price}}
+                                                    </del>
+                                                    <ins>
+                                                        Rs.{{newarrivals.price}}
+                                                    </ins>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="top-rated" class="tab-panel">
+                        <div class="ysera-product">
+                            <ul class="row list-products auto-clear equal-container product-grid">
+                                <!--toprated-->
+                                {% if toprated_products %}
+                                {% for toprated in toprated_products %}
+                                <li class="product-item  col-lg-3 col-md-4 col-sm-6 col-xs-6 col-ts-12 style-1">
+                                    <div class="product-inner equal-element">
+                                        <div class="product-top">
+                                            {% if toprated.new == 'yes' %}
+                                            <div class="flash">
+                                                <span class="onnew">
+                                                    <span class="text">
+                                                        new
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-thumb">
+                                            <div class="thumb-inner">
+                                                <a href="{% url "product" p=toprated.slug %}">
+                                                    <img src="{{toprated.image_url}}" alt="{{toprated.p_name}}">
+                                                </a>
+                                                <div class="thumb-group">
+                                                    <div class="yith-wcwl-add-to-wishlist">
+                                                        <div class="yith-wcwl-add-button">
+                                                            <a href="#">Add to Wishlist</a>
+                                                        </div>
+                                                    </div>
+                                                    <a href="#" class="button quick-wiew-button">Quick View</a>
+                                                    <div class="loop-form-add-to-cart">
+                                                        <button class="single_add_to_cart_button button">Add to cart
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="product-info">
+                                            <h5 class="product-name product_title">
+                                                <a href="{% url "product" p=toprated.slug %}">{{toprated.p_name}}</a>
+                                            </h5>
+                                            <div class="group-info">
+
+                                                <div class="price">
+                                                    <del>
+                                                        Rs.{{toprated.del_price}}
+                                                    </del>
+                                                    <ins>
+                                                        Rs.{{toprated.price}}
+                                                    </ins>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if offers_3 %}
+        {% for offer_3 in offers_3  %}
+        <div class="banner-wrapp rows-space-60">
+            <div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="banner">
+                            <div class="item-banner style6">
+                                <div class="inner">
+                                    <div class="container">
+                                        <div class="banner-content">
+                                            <h4 class="ysera-subtitle">{{offer_3.title}}</h4>
+                                            <h3 class="title">Save <span>{{offer_3.offers}}%</span><br/> {{offer_3.descripton}}
+                                            </h3>
+                                            <a href="{% url "search" s="0" page="1" %}?q={{offer_3.offer_applies_to}}" class="button btn-view-promotion">Shop now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <style>
+            @media(max-width:768px) {
+
+                .mobile-scroll {
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    -webkit-overflow-scrolling: touch;
+                    padding-bottom: 10px;
+
+                    /* HIDE SCROLLBAR */
+                    scrollbar-width: none;
+                    /* Firefox */
+                }
+
+                .mobile-scroll::-webkit-scrollbar {
+                    display: none;
+                    /* Chrome/Safari */
+                }
+
+                .mobile-scroll ul {
+                    display: flex;
+                    flex-wrap: nowrap !important;
+                    width: max-content;
+
+                    /* reduce gap between items */
+                    gap: 0px;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .mobile-scroll li {
+                    flex: 0 0 40%;
+                    /* control card width */
+                    max-width: 40%;
+                    min-width: 150px;
+                }
+
+                .mobile-scroll .product-inner {
+                    padding: 5px;
+                    background: #fff;
+                    border-radius: 8px;
+                }
+
+                .mobile-scroll img {
+                    width: 100%;
+                    height: 150px;
+                    object-fit: cover;
+                    border-radius: 6px;
+                }
+            }
+        </style>
+        <div class="product-in-stock-wrapp">
+            <div class="container">
+                <h3 class="custommenu-title-blog white">
+                    Bridal Sets
+                </h3>
+                <div class="ysera-product style3">
+                    <div class="mobile-scroll">
+                        <ul class="row list-products auto-clear equal-container product-grid">\
+                            <!--bridal sets-->
+                            {% if bridalsets %}
+                            {% for bridalset  in bridalsets %}
+                            <li class="product-item  col-lg-4 col-md-6 col-sm-6 col-xs-6 col-ts-12 style-3">
+                                <div class="product-inner equal-element">
+                                    <div class="product-thumb">
+                                        <div class="product-top">
+                                            {% if bridalset.new == 'yes' %}
+                                            <div class="flash">
+                                                <span class="onnew">
+                                                    <span class="text">
+                                                        new
+                                                    </span>
+                                                </span>
+                                            </div>
+                                            {% endif %}
+                                            <div class="yith-wcwl-add-to-wishlist">
+                                                <div class="yith-wcwl-add-button">
+                                                    <a href="#" tabindex="0">Add to Wishlist</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="thumb-inner">
+                                            <a href="{% url "product" p=bridalset.slug %}" tabindex="0">
+                                                <img src="{{bridalset.image_url}}" alt="{{bridalset.p_name}}">
+                                            </a>
+                                        </div>
+                                        <a href="#" class="button quick-wiew-button" tabindex="0">Quick View</a>
+                                    </div>
+                                    <div class="product-info">
+                                        <h5 class="product-name product_title">
+                                            <a href="{% url "product" p=bridalset.slug %}" tabindex="0">{{bridalset.p_name}}</a>
+                                        </h5>
+                                        <div class="group-info">
+                                            <div class="stars-rating">
+                                                <div class="star-rating">
+                                                    <span class="star-3"></span>
+                                                </div>
+                                                <div class="count-star">
+                                                    (3)
+                                                </div>
+                                            </div>
+                                            <div class="price">
+                                                <span>Rs.{{bridalset.price}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="group-buttons">
+                                            <div class="quantity">
+                                                <div class="control">
+                                                    <a class="btn-number qtyminus quantity-minus" href="#">-</a>
+                                                    <input type="text" data-step="1" data-min="0" value="1" title="Qty"
+                                                        class="input-qty qty" size="4">
+                                                    <a href="#" class="btn-number qtyplus quantity-plus">+</a>
+                                                </div>
+                                            </div>
+                                            <button class="add_to_cart_button button" tabindex="0">Shop now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {% endfor %}
+                            {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="banner-wrapp rows-space-30">
+            <div class="container">
+                <div class="row">
+                    <!--offer 4-->
+                    {% if offers_4 %}
+                    {% for offer_4 in offers_4 %}
+
+                    <div class="col-lg-5 col-md-5 col-sm-12">
+                        <div class="banner">
+                            <div class="item-banner style10"  style="background-image: url({{offer_4.image.url}});">
+                                <div class="inner" style="background-image: url({{offer_4.image.url}});">
+                                    <div class="banner-content">
+                                        <h4 class="ysera-subtitle">{{offer_4.title}} </h4>
+                                        <h3 class="title">{{offer_4.descripton}}</h3>
+                                        <div class="description">
+                                            {{offer_4.offers}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <!--offer 5-->
+                    {% if offers_5 %}
+                    {% for offer_5 in offers_5 %}
+                    <div class="col-lg-7 col-md-7 col-sm-12">
+                        <div class="banner">
+                            <div class="item-banner style11" style="background-image: url({{offer_5.image.url}});">
+                                <div class="inner" style="background-image: url({{offer_5.image.url}});">
+                                    <div class="banner-content">
+                                        <h4 class="ysera-subtitle">{{offer_5.title}}</h4>
+                                        <h3 class="title">{{offer_5.descripton}} </h3>
+                                        <div class="description">
+                                            {{offer_5.offers}}
+                                        </div>
+                                        <a href="{% url "search" s="0" page="1" %}?q={{offer_s.offer_applies_to}}" class="button btn-shopping-us">Shop now</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="ysera-blog-wraap">
+            <div class="container">
+                <h3 class="custommenu-title-blog">
+                    Our Latest News
+                </h3>
+                <div class="ysera-blog default">
+                    <div class="owl-slick equal-container nav-center"
+                        data-slick='{"autoplay":false, "autoplaySpeed":1000, "arrows":false, "dots":true, "infinite":true, "speed":800, "rows":1}'
+                        data-responsive='[{"breakpoint":"2000","settings":{"slidesToShow":3}},{"breakpoint":"1200","settings":{"slidesToShow":3}},{"breakpoint":"992","settings":{"slidesToShow":2}},{"breakpoint":"768","settings":{"slidesToShow":2}},{"breakpoint":"481","settings":{"slidesToShow":1}}]'>
+                        <div class="ysera-blog-item equal-element layout1">
+                            <div class="post-thumb">
+                                <a href="#">
+                                    <img src="{% static "images/slider-blog-thumb-1.jpg" %}" alt="img">
+                                </a>
+                                <div class="category-blog">
+                                    <ul class="list-category">
+                                        <li class="category-item">
+                                            <a href="#">Skincare</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="post-item-share">
+                                    <a href="#" class="icon">
+                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="box-content">
+                                        <a href="#">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-google-plus"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-pinterest"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-info">
+                                <div class="blog-meta">
+                                    <div class="post-date">
+                                        Agust 17, 09:14 am
+                                    </div>
+                                    <span class="view">
+                                        <i class="icon fa fa-eye" aria-hidden="true"></i>
+                                        631
+                                    </span>
+                                    <span class="comment">
+                                        <i class="icon fa fa-commenting" aria-hidden="true"></i>
+                                        84
+                                    </span>
+                                </div>
+                                <h2 class="blog-title">
+                                    <a href="#">We bring you the best by working</a>
+                                </h2>
+                                <div class="main-info-post">
+                                    <p class="des">
+                                        Phasellus condimentum nulla a arcu lacinia, a venenatis ex congue.
+                                        Mauris nec ante magna.
+                                    </p>
+                                    <a class="readmore" href="#">Read more</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ysera-blog-item equal-element layout1">
+                            <div class="post-thumb">
+                                <a href="#">
+                                    <img src="{% static "images/slider-blog-thumb-2.jpg" %}" alt="img">
+                                </a>
+                                <div class="category-blog">
+                                    <ul class="list-category">
+                                        <li class="category-item">
+                                            <a href="#">HOW TO</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="post-item-share">
+                                    <a href="#" class="icon">
+                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="box-content">
+                                        <a href="#">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-google-plus"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-pinterest"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-info">
+                                <div class="blog-meta">
+                                    <div class="post-date">
+                                        Agust 17, 09:14 am
+                                    </div>
+                                    <span class="view">
+                                        <i class="icon fa fa-eye" aria-hidden="true"></i>
+                                        631
+                                    </span>
+                                    <span class="comment">
+                                        <i class="icon fa fa-commenting" aria-hidden="true"></i>
+                                        84
+                                    </span>
+                                </div>
+                                <h2 class="blog-title">
+                                    <a href="#">We know that buying Items</a>
+                                </h2>
+                                <div class="main-info-post">
+                                    <p class="des">
+                                        Using Lorem Ipsum allows designers to put together layouts
+                                        and the form content
+                                    </p>
+                                    <a class="readmore" href="#">Read more</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ysera-blog-item equal-element layout1">
+                            <div class="post-thumb">
+                                <div class="video-ysera-blog">
+                                    <figure>
+                                        <img src="{% static "images/slider-blog-thumb-3.jpg" %}" alt="img" width="370"
+                                            height="280">
+                                    </figure>
+                                    <a class="quick-install" href="#" data-videosite="vimeo"
+                                        data-videoid="134060140"></a>
+                                </div>
+                                <div class="category-blog">
+                                    <ul class="list-category">
+                                        <li class="category-item">
+                                            <a href="#">VIDEO</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="post-item-share">
+                                    <a href="#" class="icon">
+                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="box-content">
+                                        <a href="#">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-google-plus"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-pinterest"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-info">
+                                <div class="blog-meta">
+                                    <div class="post-date">
+                                        Agust 17, 09:14 am
+                                    </div>
+                                    <span class="view">
+                                        <i class="icon fa fa-eye" aria-hidden="true"></i>
+                                        631
+                                    </span>
+                                    <span class="comment">
+                                        <i class="icon fa fa-commenting" aria-hidden="true"></i>
+                                        84
+                                    </span>
+                                </div>
+                                <h2 class="blog-title">
+                                    <a href="#">We design functional Items</a>
+                                </h2>
+                                <div class="main-info-post">
+                                    <p class="des">
+                                        Risus non porta suscipit lobortis habitasse felis, aptent
+                                        interdum pretium ut.
+                                    </p>
+                                    <a class="readmore" href="#">Read more</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ysera-blog-item equal-element layout1">
+                            <div class="post-thumb">
+                                <a href="#">
+                                    <img src="{% static "images/slider-blog-thumb-4.jpg" %}" alt="img">
+                                </a>
+                                <div class="category-blog">
+                                    <ul class="list-category">
+                                        <li class="category-item">
+                                            <a href="#">Skincare</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="post-item-share">
+                                    <a href="#" class="icon">
+                                        <i class="fa fa-share-alt" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="box-content">
+                                        <a href="#">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-google-plus"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-pinterest"></i>
+                                        </a>
+                                        <a href="#">
+                                            <i class="fa fa-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-info">
+                                <div class="blog-meta">
+                                    <div class="post-date">
+                                        Agust 17, 09:14 am
+                                    </div>
+                                    <span class="view">
+                                        <i class="icon fa fa-eye" aria-hidden="true"></i>
+                                        631
+                                    </span>
+                                    <span class="comment">
+                                        <i class="icon fa fa-commenting" aria-hidden="true"></i>
+                                        84
+                                    </span>
+                                </div>
+                                <h2 class="blog-title">
+                                    <a href="#">We know that buying Items</a>
+                                </h2>
+                                <div class="main-info-post">
+                                    <p class="des">
+                                        Class integer tellus praesent at torquent cras, potenti erat fames
+                                        volutpat etiam.
+                                    </p>
+                                    <a class="readmore" href="#">Read more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="instagram-wrapp">
+        <div>
+            <h3 class="custommenu-title-blog">
+                <i class="flaticon-instagram" aria-hidden="true"></i>
+                Instagram Feed
+            </h3>
+            <div class="ysera-instagram">
+                <div class="instagram owl-slick equal-container"
+                    data-slick='{"autoplay":false, "autoplaySpeed":1000, "arrows":false, "dots":false, "infinite":true, "speed":800, "rows":1}'
+                    data-responsive='[{"breakpoint":"2000","settings":{"slidesToShow":5}},{"breakpoint":"1200","settings":{"slidesToShow":4}},{"breakpoint":"992","settings":{"slidesToShow":3}},{"breakpoint":"768","settings":{"slidesToShow":2}},{"breakpoint":"481","settings":{"slidesToShow":2}}]'>
+                    <div class="item-instagram">
+                        <a href="#">
+                            <img src="{% static "images/item-instagram-1.jpg" %}" alt="img">
+                        </a>
+                        <span class="text">
+                            <i class="icon flaticon-instagram" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="item-instagram">
+                        <a href="#">
+                            <img src="{% static "images/item-instagram-2.jpg" %}" alt="img">
+                        </a>
+                        <span class="text">
+                            <i class="icon flaticon-instagram" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="item-instagram">
+                        <a href="#">
+                            <img src="{% static "images/item-instagram-3.jpg" %}" alt="img">
+                        </a>
+                        <span class="text">
+                            <i class="icon flaticon-instagram" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="item-instagram">
+                        <a href="#">
+                            <img src="{% static "images/item-instagram-4.jpg" %}" alt="img">
+                        </a>
+                        <span class="text">
+                            <i class="icon flaticon-instagram" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="item-instagram">
+                        <a href="#">
+                            <img src="{% static "images/item-instagram-5.jpg" %}" alt="img">
+                        </a>
+                        <span class="text">
+                            <i class="icon flaticon-instagram" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock index %}

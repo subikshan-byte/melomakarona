@@ -1,0 +1,375 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{product.p_name}}{% endblock title %}
+{% block index %}
+    <div class="main-content main-content-details single no-sidebar">
+        {% if  product %}
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-trail breadcrumbs">
+                        <ul class="trail-items breadcrumb">
+                            <li class="trail-item trail-begin">
+                                <a href="{% url "home" %}">Home</a>
+                            </li>
+                            <li class="trail-item">
+                                <a href="#">{{product.category}}</a>
+                            </li>
+                            <li class="trail-item trail-end active">
+                                {{product.p_name}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+          
+            <div class="row">
+                <div class="content-area content-details full-width col-lg-9 col-md-8 col-sm-12 col-xs-12">
+                    <div class="site-main">
+                        <div class="details-product">
+                            <div class="details-thumd">
+                                <div class="image-preview-container image-thick-box image_preview_container">
+                                    <img id="img_zoom" data-zoom-image="{{product.image_url}}"
+                                        src="{{product.image_url}}" alt="img">
+                                    <a href="#" class="btn-zoom open_qv"><i class="fa fa-search"
+                                            aria-hidden="true"></i></a>
+                                </div>
+                                <div class="product-preview image-small product_preview">
+                                    <div id="thumbnails" class="thumbnails_carousel owl-carousel" data-nav="true"
+                                        data-autoplay="false" data-dots="false" data-loop="false" data-margin="10"
+                                        data-responsive='{"0":{"items":3},"480":{"items":3},"600":{"items":3},"1000":{"items":3}}'>
+                                        <a href="#" data-image="{{product.image_url}}"
+                                            data-zoom-image="{{product.image_url}}" class="active">
+                                            <img src="{{product.image_url}}"
+                                                data-large-image="{{product.image_url}}" alt="img">
+                                        </a>
+                                        {% if product_other_image %}
+                                        {% for images_other in  product_other_image %}
+                             
+                                        <a href="#" data-image="{{images_other.image.url}}"
+                                            data-zoom-image="{{images_other.image.url}}">
+                                            <img src="{{images_other.image.url}}"
+                                                data-large-image="{{images_other.image.url}}" alt="img">
+                                        </a>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="details-infor">
+                                <h1 class="product-title">
+                                    {{product.p_name}}
+                                </h1>
+
+                                <div class="availability">
+                                    availability:
+                                    <a href="#" id="stock">{{product.stock_status}}</a>
+                    
+                                </div>
+                                <div class="price">
+                                    <span>Rs.{{product.price}}</span>
+                                </div>
+                                <div class="product-details-description">
+                                    <ul>
+                                        <li>{{product.point1}}</li>
+                                        <li>{{product.point2}}
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+
+                                <div class="group-button">
+                                    <div class="yith-wcwl-add-to-wishlist">
+                                        <div class="yith-wcwl-add-button">
+                                            <a href="#">Add to Wishlist</a>
+                                        </div>
+                                    </div>
+                                    <div class="size-chart-wrapp">
+                                        <div class="btn-size-chart">
+                                            <a id="size_chart" href="{% static "images/size-chart.jpg" %}" class="fancybox">View
+                                                Size Chart</a>
+                                        </div>
+                                    </div>
+                                    <div class="quantity-add-to-cart">
+                                        <div class="quantity">
+                                            <div class="control">
+                                                <a class="btn-number qtyminus quantity-minus" href="#">-</a>
+                                                <input type="text" data-step="1" data-min="0" value="1" title="Qty"
+                                                    class="input-qty qty" size="4">
+                                                <a href="#" class="btn-number qtyplus quantity-plus">+</a>
+                                            </div>
+                                        </div>
+                                        <button class="single_add_to_cart_button button">Add to cart</button>
+                                    </div>
+                                    <!-- Rental Section -->
+                                     {% if product.stock_status == "out of stock" %}
+                                </br>
+                                     <p style="color:red;"><del>out of stock</del></p>
+                                     {% else %}
+    
+                                    <div class="rental-section">
+                                        <!-- Pincode Check -->
+                                        <div class="pincode-check-container">
+                                            <h4 class="rental-title">Rent this item</h4>
+                                            <div class="pincode-input-group">
+                                                <input type="tel" id="pincode-input" class="pincode-input"
+                                                    placeholder="Enter pincode for rental" maxlength="6"
+                                                    pattern="[0-9]{6}">
+                                                <button id="check-pincode" class="button check-pincode-btn">Check
+                                                    Availability</button>
+                                            </div>
+                                            <div class="pincode-message"></div>
+
+                                            <!-- Hidden Serviceable Pincodes (for demo) -->
+                                            <div id="serviceable-pincodes"
+                                                data-pincodes="110001,110002,400001,400002,560001,560002,700001,700002">
+                                            </div>
+                                        </div>
+
+                                        <!-- Rent Now Button (initially hidden/disabled) -->
+                                        <div class="rental-action" style="display: none;">
+                                            <button id="rent-now-btn" class="button rent-now-btn" disabled>Rent
+                                                Now</button>
+                                            <div class="rental-info">
+                                                <p class="rental-price">Rental: <span>Rs.200/day</span></p>
+                                                <p class="rental-note">Min. rental period: 3 days</p>
+                                                <p class="security-note">Security deposit: Rs.2000 (refundable)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            // Rental functionality
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Serviceable pincodes (in production, fetch from API)
+                                const serviceablePincodes = ['110001', '110002', '400001', '400002', '560001', '560002', '700001', '700002'];
+
+                                // Get DOM elements
+                                const pincodeInput = document.getElementById('pincode-input');
+                                const checkPincodeBtn = document.getElementById('check-pincode');
+                                const pincodeMessage = document.querySelector('.pincode-message');
+                                const rentalAction = document.querySelector('.rental-action');
+                                const rentNowBtn = document.getElementById('rent-now-btn');
+                                const rentNowBtnOriginal = rentNowBtn ? rentNowBtn.cloneNode(true) : null;
+
+                                // Validate pincode input (only numbers, max 6 digits)
+                                pincodeInput.addEventListener('input', function (e) {
+                                    // Remove non-numeric characters
+                                    this.value = this.value.replace(/[^0-9]/g, '');
+
+                                    // Limit to 6 digits
+                                    if (this.value.length > 6) {
+                                        this.value = this.value.slice(0, 6);
+                                    }
+
+                                    // Enable/disable check button based on input length
+                                    checkPincodeBtn.disabled = this.value.length !== 6;
+                                });
+
+                                // Check pincode availability
+                                checkPincodeBtn.addEventListener('click', function () {
+                                    const pincode = pincodeInput.value.trim();
+
+                                    if (pincode.length !== 6) {
+                                        showMessage('Please enter a valid 6-digit pincode', 'error');
+                                        return;
+                                    }
+
+                                    // Show loading state
+                                    showMessage('Checking availability...', '');
+                                    checkPincodeBtn.disabled = true;
+                                    checkPincodeBtn.textContent = 'Checking...';
+
+                                    // Simulate API call delay
+                                    setTimeout(() => {
+                                        checkPincodeAvailability(pincode);
+                                    }, 1000);
+                                });
+
+                                // Check pincode when Enter key is pressed
+                                pincodeInput.addEventListener('keypress', function (e) {
+                                    if (e.key === 'Enter' && this.value.length === 6) {
+                                        checkPincodeBtn.click();
+                                    }
+                                });
+
+                                // Function to check pincode availability
+                                function checkPincodeAvailability(pincode) {
+                                    // In production, replace this with actual API call
+                                    const isServiceable = serviceablePincodes.includes(pincode);
+
+                                    if (isServiceable) {
+                                        // Pincode is serviceable
+                                        showMessage('✓ Rental available at this pincode!', 'success');
+                                        enableRentalOption();
+
+                                        // Store valid pincode in localStorage for session
+                                        localStorage.setItem('validRentalPincode', pincode);
+                                    } else {
+                                        // Pincode not serviceable
+                                        showMessage('✗ Rental not available at this pincode. Please try another.', 'error');
+                                        disableRentalOption();
+
+                                        // Clear invalid pincode from storage
+                                        localStorage.removeItem('validRentalPincode');
+                                    }
+
+                                    // Reset check button
+                                    checkPincodeBtn.disabled = false;
+                                    checkPincodeBtn.textContent = 'Check Availability';
+                                }
+
+                                // Function to show messages
+                                function showMessage(text, type) {
+                                    pincodeMessage.textContent = text;
+                                    pincodeMessage.className = 'pincode-message';
+                                    if (type) {
+                                        pincodeMessage.classList.add(type);
+                                    }
+                                }
+
+                                // Function to enable rental option
+                                function enableRentalOption() {
+                                    rentalAction.style.display = 'block';
+                                    rentNowBtn.disabled = false;
+                                    rentNowBtn.textContent = 'Rent Now';
+                                }
+
+                                // Function to disable rental option
+                                function disableRentalOption() {
+                                    rentalAction.style.display = 'none';
+                                    rentNowBtn.disabled = true;
+                                }
+
+                                // Rent Now button click handler
+                                rentNowBtn.addEventListener('click', function () {
+                                    if (this.disabled) return;
+
+                                    // Show loading state
+                                    this.disabled = true;
+                                    this.textContent = 'Processing...';
+
+                                    // Get product details for rental
+                                    const productTitle = document.querySelector('.product-title').textContent.trim();
+                                    const rentalPrice = document.querySelector('.rental-price span').textContent;
+
+                                    // Simulate rental processing
+                                    setTimeout(() => {
+                                        alert(`Rental request for "${productTitle}" has been initiated!\n\nPincode: ${pincodeInput.value}\nRental Rate: ${rentalPrice}\n\nOur team will contact you within 24 hours.`);
+
+                                        // Reset button
+                                        this.disabled = false;
+                                        this.textContent = 'Rent Now';
+                                    }, 1500);
+                                });
+
+                                // Check for saved valid pincode on page load
+                                const savedPincode = localStorage.getItem('validRentalPincode');
+                                if (savedPincode && serviceablePincodes.includes(savedPincode)) {
+                                    pincodeInput.value = savedPincode;
+                                    checkPincodeAvailability(savedPincode);
+                                }
+                            });
+                        </script>
+                        <div class="tab-details-product">
+                            <ul class="tab-link">
+                                <li class="active">
+                                    <a data-toggle="tab" aria-expanded="true" href="#product-descriptions">Descriptions
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-container">
+                                <div id="product-descriptions" class="tab-panel active">
+                                    <p>
+                                        Quisque quis ipsum venenatis, fermentum ante volutpat, ornare enim.
+                                        Phasellus molestie risus non aliquet cursus.
+                                        Integer
+                                        vestibulum mi lorem, id hendrerit ante lobortis non.
+                                        Nunc ante ante, lobortis non pretium non, vulputate vel nisi.
+                                        Maecenas dolor elit, fringilla nec turpis ac, auctor vulputate nulla. Phasellus
+                                        sed
+                                        laoreet velit.
+                                    </p>
+                                    <p>
+                                        Proin fringilla urna vel mattis euismod.
+                                        Etiam sodales, massa non tincidunt iaculis, mauris libero scelerisque justo, ut
+                                        rutrum lectus urna sit amet quam.
+                                        Nulla maximus vestibulum mi vitae accumsan.
+                                    </p>
+                                </div>
+
+                            </div>
+                            <div style="clear: left;"></div>
+                            <div class="related products product-grid">
+                                <h2 class="product-grid-title">You may also like</h2>
+                                <div class="owl-products owl-slick equal-container nav-center"
+                                    data-slick='{"autoplay":false, "autoplaySpeed":1000, "arrows":true, "dots":false, "infinite":true, "speed":800, "rows":1}'
+                                    data-responsive='[{"breakpoint":"2000","settings":{"slidesToShow":3}},{"breakpoint":"1200","settings":{"slidesToShow":2}},{"breakpoint":"992","settings":{"slidesToShow":2}},{"breakpoint":"480","settings":{"slidesToShow":1}}]'>
+                                    <!--category difference-->
+                                    {% if same_category_products %}
+                                    {% for  same in  same_category_products %}
+                                    <div class="product-item style-1">
+                                        <div class="product-inner equal-element">
+                                            {% if same.new == "yes" %}
+                                            <div class="product-top">
+                                                <div class="flash">
+                                                    <span class="onnew">
+                                                        <span class="text">
+                                                            new
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="product-thumb">
+                                                <div class="thumb-inner">
+                                                    <a href="{% url "product" p=same.slug %}">
+                                                        <img src="{{same.image_url}}" alt="img">
+                                                    </a>
+                                                    <div class="thumb-group">
+                                                        <div class="yith-wcwl-add-to-wishlist">
+                                                            <div class="yith-wcwl-add-button">
+                                                                <a href="#">Add to Wishlist</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="loop-form-add-to-cart">
+                                                            <button class="single_add_to_cart_button button">Add to cart
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="product-info">
+                                                <h5 class="product-name product_title">
+                                                    <a href="{% url "product" p=same.slug %}">{{same.p_name}}</a>
+                                                </h5>
+                                                <div class="group-info">
+
+                                                    <div class="price">
+                                                        <del>
+                                                            Rs.{{same.del_price}}
+                                                        </del>
+                                                        <ins>
+                                                            Rs.{{same.price}}
+                                                        </ins>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          {% endif %}
+{% endblock index %}

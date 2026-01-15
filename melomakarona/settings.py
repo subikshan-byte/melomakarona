@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-_od7y#_-m7_a%_v_kag1tzd8v!7-08kpzaer-mb-=dnq(@a35w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["190.92.175.39"]
 
 
 # Application definition
@@ -160,4 +160,5 @@ JAZZMIN_SETTINGS = {
     # UI Enhancements
     "changeform_format": "horizontal_tabs",
     "show_ui_builder": False,
+
 }

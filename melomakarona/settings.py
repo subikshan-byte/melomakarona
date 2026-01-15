@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-_od7y#_-m7_a%_v_kag1tzd8v!7-08kpzaer-mb-=dnq(@a35w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["tharatrinket.com"]
+ALLOWED_HOSTS = [
+    "tharatrinket.com",
+    "www.tharatrinket.com",
+]
+
 
 
 # Application definition
@@ -162,5 +166,15 @@ JAZZMIN_SETTINGS = {
     "show_ui_builder": False,
 
 }
+CSRF_TRUSTED_ORIGINS = [
+    "https://tharatrinket.com",
+    "https://www.tharatrinket.com",
+]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 

@@ -1,0 +1,35 @@
+/* Background */
+body {
+    background: radial-gradient(circle, #0f0f0f, #000);
+}
+
+/* Header */
+#header {
+    background: linear-gradient(135deg, #d4af37, #b8962e);
+}
+
+/* Sidebar */
+.sidebar {
+    background: #0b0b0b;
+}
+
+/* Cards */
+.module {
+    background: #121212;
+    border-radius: 16px;
+    border: 1px solid rgba(212,175,55,0.25);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+/* Buttons */
+.button {
+    background: linear-gradient(135deg, #d4af37, #f5e7b2);
+    color: #000;
+    border-radius: 30px;
+    font-weight: 600;
+}
+
+/* Links */
+a {
+    color: #d4af37;
+}

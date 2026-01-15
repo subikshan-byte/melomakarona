@@ -1,58 +1,115 @@
 from django.contrib import admin
+from django.utils.html import mark_safe
+from django.db.models import Sum
+from django.http import JsonResponse
+from django.urls import path
+from django.contrib.admin import site
+from django.utils.timezone import now
+from datetime import timedelta
+from django.http import JsonResponse
+from django.db.models import Sum, Count, F
+from django.db.models.functions import TruncDate
+from django.utils.timezone import now
+from datetime import timedelta
+from django.urls import path
+from django.contrib.admin import site
 
-# Register your models here.
-from .models import Cart, CartItem, OfferImage,Coupon, Product, ProductImage,UserProfile
-from .models import Category,Coupon
-admin.site.site_header = "Zapwaves Administration"
+
+from .models import (
+    Category, Product, ProductImage,
+    Cart, CartItem,
+    Order, OrderItem,
+    UserProfile, Coupon, OfferImage
+)
+
+# ================= ADMIN BRANDING =================
+admin.site.site_header = "Zapwaves Jewellery Administration"
 admin.site.site_title = "Zapwaves Admin Portal"
-admin.site.index_title = "Welcome to Zapwaves Dashboard"
-# ---------------- CATEGORY ----------------
+admin.site.index_title = "Luxury Jewellery Dashboard"
+
+# ================= CATEGORY =================
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('c_id', 'c_name', 'slug')      
-    search_fields = ('c_name', 'slug')# filter by hot/trending/bestselling
-    prepopulated_fields = {'slug': ('c_name',)}
+    list_display = ("c_id", "c_name", "slug")
+    search_fields = ("c_name",)
+    prepopulated_fields = {"slug": ("c_name",)}
+
+# ================= PRODUCT IMAGE INLINE =================
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+    extra = 1
+    readonly_fields = ("image_preview",)
+    fields = ("image", "priority", "image_preview")
+
+    def image_preview(self, obj):
+        if obj.image:
+            return mark_safe(f"<img src='{obj.image.url}' width='70' style='border-radius:10px;'>")
+        return "-"
+
+# ================= PRODUCT =================
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('p_id', 'p_name', 'desc', 'price', 'category', 'stock_status', 'slug')  
-    list_filter = ('category', 'where_to_display', 'stock_status',"size") 
-    search_fields = ('p_name', 'desc', 'slug', 'brand_name',"p_id","size")
-    prepopulated_fields = {'slug': ('desc',)}
-    autocomplete_fields = ['category']
+    list_display = (
+        "image_preview",
+        "p_id",
+        "p_name",
+        "category",
+        "price",
+        "stock_status",
+        "where_to_display",
+    )
+    list_filter = ("category", "stock_status", "where_to_display", "new")
+    search_fields = ("p_name", "brand_name", "desc")
+    prepopulated_fields = {"slug": ("p_name",)}
+    autocomplete_fields = ("category",)
+    inlines = [ProductImageInline]
+    readonly_fields = ("image_preview",)
 
-# ---------------- PRODUCT IMAGE ----------------
-@admin.register(ProductImage)
-class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('img_id', 'p_id', 'priority','slug')
-    search_fields = ('p_id__p_id', 'p_id__p_name','priority','slug')
+    fieldsets = (
+        ("💎 Basic Details", {
+            "fields": ("p_name", "brand_name", "category", "desc", "slug"),
+        }),
+        ("✨ Pricing", {
+            "fields": ("price", "del_price", "save_upto"),
+        }),
+        ("📦 Inventory", {
+            "fields": ("stock_status", "size", "delivery_times"),
+        }),
+        ("🏷 Display Settings", {
+            "fields": ("new", "where_in_home", "where_to_display"),
+        }),
+        ("🖼 Preview", {
+            "fields": ("image_preview",),
+        }),
+    )
 
-    prepopulated_fields = {'slug': ('p_id',)}
-    autocomplete_fields = ['p_id']
+    def image_preview(self, obj):
+        img = obj.productimage_set.first()
+        if img and img.image:
+            return mark_safe(
+                f"<img src='{img.image.url}' width='90' "
+                f"style='border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.4);'>"
+            )
+        return "No Image"
 
-# ---------------- SIZE ----------------
+    image_preview.short_description = "Preview"
 
-
-# ---------------- CART ----------------
+# ================= CART =================
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'created_at', 'total_price')
-    search_fields = ('user__username',)
-    list_filter = ('created_at',)
+    list_display = ("id", "user", "created_at", "total_price")
 
+# ================= CART ITEM =================
 @admin.register(CartItem)
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('id', 'cart', 'product', 'quantity', 'subtotal')
-    search_fields = ('product__p_name', 'cart__user__username')
-    list_filter = ('cart', 'product')
+    list_display = ("id", "cart", "product", "quantity", "subtotal")
 
-# ---------------- USER PROFILE ----------------
+# ================= USER PROFILE =================
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'mobile')
-    search_fields = ('user__username', 'mobile')
-    list_filter = ('user',)
+    list_display = ("user", "mobile", "zip_code")
+    search_fields = ("user__username", "mobile")
 
-# ---------------- ORDER ----------------
 @admin.action(description="Mark selected orders as Shipped")
 def mark_as_shipped(modeladmin, request, queryset):
     queryset.update(status='shipped')
@@ -150,20 +207,145 @@ class OrderAdmin(admin.ModelAdmin):
     @admin.action(description="Mark selected orders as Delivered")
     def mark_as_delivered(self, request, queryset):
         queryset.update(status='delivered')
+
+# ================= COUPON =================
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):
-    list_display = ('code', 'discount_percent', 'active', 'expiry_date', 'is_valid_display')
-    list_filter = ('active', 'expiry_date')
-    search_fields = ('code',)
-    ordering = ('-expiry_date',)
+    list_display = ("code", "discount_percent", "active", "expiry_date", "is_valid_display")
 
     def is_valid_display(self, obj):
-        """Show whether the coupon is currently valid in the list display."""
         return obj.is_valid()
-    is_valid_display.short_description = "Valid?"
+
     is_valid_display.boolean = True
+    is_valid_display.short_description = "Valid?"
+
+# ================= OFFER IMAGE =================
 @admin.register(OfferImage)
 class OfferImageAdmin(admin.ModelAdmin):
-    list_display = ("img_id","Type","title","descripton","offers","active","where_to_display","offer_applies_to","slug")
-    list_filter = ("active","Type","where_to_display",)
-    search_fields = ("active","Type","title","where_to_display", "slug")
+    list_display = ("img_id", "title", "Type", "active", "where_to_display")
+    list_filter = ("active", "Type")
+
+# ==================================================
+# 📊 SALES CHART (MATCHES YOUR MODELS)
+# ==================================================
+
+# ======== ANALYTICS FOR PRODUCT & CATEGORY ========
+
+from django.http import JsonResponse
+from django.db.models import Sum, F
+from django.contrib.admin import site
+from django.urls import path
+
+# CATEGORY-WISE SALES
+def category_sales_data(request):
+    qs = (
+        OrderItem.objects
+        .filter(order__status="delivered")
+        .values(category=F("product__category__c_name"))
+        .annotate(revenue=Sum(F("price") * F("quantity")))
+        .order_by("-revenue")
+    )
+
+    return JsonResponse({
+        "labels": [i["category"] for i in qs],
+        "values": [float(i["revenue"] or 0) for i in qs],
+    })
+
+
+# PRODUCT-WISE SALES
+def product_sales_data(request):
+    qs = (
+        OrderItem.objects
+        .filter(order__status="delivered")
+        .values(product_name=F("product__p_name"))
+        .annotate(revenue=Sum(F("price") * F("quantity")))
+        .order_by("-revenue")[:10]
+    )
+
+    return JsonResponse({
+        "labels": [i["product"] for i in qs],
+        "values": [float(i["revenue"] or 0) for i in qs],
+    })
+
+
+# REGISTER ADMIN URLS (VERY IMPORTANT)
+def get_admin_urls(urls):
+    def wrapper():
+        return [
+            path("analytics/category-sales/", site.admin_view(category_sales_data)),
+            path("analytics/product-sales/", site.admin_view(product_sales_data)),
+        ] + urls
+    return wrapper
+
+site.get_urls = get_admin_urls(site.get_urls())
+
+def dashboard_kpi_data(request):
+    start = now() - timedelta(days=30)
+
+    revenue = (
+        OrderItem.objects
+        .filter(order__status="delivered")
+        .aggregate(total=Sum(F("price") * F("quantity")))["total"] or 0
+    )
+
+    orders = Order.objects.filter(status="delivered").count()
+    products = Product.objects.count()
+    categories = Category.objects.count()
+
+    daily = (
+        OrderItem.objects
+        .filter(order__status="delivered", order__created_at__gte=start)
+        .annotate(day=TruncDate("order__created_at"))
+        .values("day")
+        .annotate(total=Sum(F("price") * F("quantity")))
+        .order_by("day")
+    )
+
+    return JsonResponse({
+        "kpi": {
+            "revenue": float(revenue),
+            "orders": orders,
+            "products": products,
+            "categories": categories,
+        },
+        "daily": {
+            "labels": [str(i["day"]) for i in daily],
+            "values": [float(i["total"]) for i in daily],
+        }
+    })
+def category_sales_data(request):
+    qs = (
+        OrderItem.objects
+        .filter(order__status="delivered")
+        .values(category=F("product__category__c_name"))
+        .annotate(total=Sum(F("price") * F("quantity")))
+        .order_by("-total")
+    )
+    return JsonResponse({
+        "labels": [i["category"] for i in qs],
+        "values": [float(i["total"]) for i in qs],
+    })
+
+
+def product_sales_data(request):
+    qs = (
+        OrderItem.objects
+        .filter(order__status="delivered")
+        .values(product_name=F("product__p_name"))
+        .annotate(total=Sum(F("price") * F("quantity")))
+        .order_by("-total")[:8]
+    )
+    return JsonResponse({
+        "labels": [i["product_name"] for i in qs],
+        "values": [float(i["total"]) for i in qs],
+    })
+def get_admin_urls(urls):
+    def wrapper():
+        return [
+            path("analytics/dashboard/", site.admin_view(dashboard_kpi_data)),
+            path("analytics/category-sales/", site.admin_view(category_sales_data)),
+            path("analytics/product-sales/", site.admin_view(product_sales_data)),
+        ] + urls
+    return wrapper
+
+site.get_urls = get_admin_urls(site.get_urls())

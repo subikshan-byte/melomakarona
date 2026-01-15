@@ -29,9 +29,45 @@
     <link rel="stylesheet" href="{% static "css/mobile-menu.css" %}">
     <link rel="stylesheet" href="{% static "fonts/flaticon/flaticon.css" %}">
     <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <style>
+        #page-loader {
+            position: fixed;
+            inset: 0;
+            background: #fffaf3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        /* hide state */
+        #page-loader.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Gold ring */
+        .ring {
+            width: 70px;
+            height: 70px;
+            border: 3px solid rgba(184,155,94,0.25);
+            border-top: 3px solid #b89b5e;
+            border-radius: 50%;
+            animation: spin 1.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
 </head>
 
 <body class="home">
+    <div id="page-loader">
+        <div class="ring"></div>
+    </div>
 
     <header class="header style7">
         {% if log == '1' %}
@@ -52,6 +88,7 @@
         </div>
         {% endif %}
         
+
         <div class="container">
             <div class="main-header">
                 <div class="row">
@@ -67,15 +104,21 @@
                             <form class="form-search form-search-width-category">
                                 <div class="form-content">
                                     <div class="category">
-                                        <select title="cate" data-placeholder="All Categories" class="chosen-select"
-                                            tabindex="1">
-                                            <option value="United States">Rings</option>
-                                            <option value="United Kingdom">Bracelets</option>
-                                            <option value="Afghanistan">Necklace</option>
-                                            <option value="Aland Islands">Earring</option>
-                                            <option value="Albania">Bangles</option>
-                                            <option value="Algeria">Other</option>
-                                        </select>
+                                        <select title="cate"
+                                            data-placeholder="All Categories"
+                                            class="chosen-select"
+                                            tabindex="1"
+                                            onchange="goToCategory(this.value)">
+                                            
+                                        <option value=""></option>
+                                        <option value="Rings">Rings</option>
+                                        <option value="Bracelets">Bracelets</option>
+                                        <option value="Necklace">Necklace</option>
+                                        <option value="Earring">Earring</option>
+                                        <option value="Bangles">Bangles</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+
                                     </div>
                                     <div class="inner">
                                         <input type="text" class="input" name="s" value="" placeholder="Search here">
@@ -107,62 +150,15 @@
                                 </div>
                             </div>
                             <div class="block-account block-header ysera-dropdown">
-                                <a href="javascript:void(0);" data-ysera="ysera-dropdown">
+                                {% if log == '1' %}
+                                <a href="{% url "login" %}" data-ysera="ysera-dropdown">
                                     <span class="flaticon-user"></span>
                                 </a>
-                                <div class="header-account ysera-submenu">
-                                    <div class="header-user-form-tabs">
-                                        <ul class="tab-link">
-                                            <li class="active">
-                                                <a data-toggle="tab" aria-expanded="true"
-                                                    href="{% url "login" %}">Login</a>
-                                            </li>
-                                            <li>
-                                                <a data-toggle="tab" aria-expanded="true"
-                                                    href="{% url "login" %}">Register</a>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-container">
-                                            <div id="header-tab-login" class="tab-panel active">
-                                                <form method="post" class="login form-login">
-                                                    <p class="form-row form-row-wide">
-                                                        <input type="email" placeholder="Email" class="input-text">
-                                                    </p>
-                                                    <p class="form-row form-row-wide">
-                                                        <input type="password" class="input-text"
-                                                            placeholder="Password">
-                                                    </p>
-                                                    <p class="form-row">
-                                                        <label class="form-checkbox">
-                                                            <input type="checkbox" class="input-checkbox">
-                                                            <span>
-                                                                Remember me
-                                                            </span>
-                                                        </label>
-                                                        <input type="submit" class="button" value="Login">
-                                                    </p>
-                                                    <p class="lost_password">
-                                                        <a href="#">Lost your password?</a>
-                                                    </p>
-                                                </form>
-                                            </div>
-                                            <div id="header-tab-rigister" class="tab-panel">
-                                                <form method="post" class="register form-register">
-                                                    <p class="form-row form-row-wide">
-                                                        <input type="email" placeholder="Email" class="input-text">
-                                                    </p>
-                                                    <p class="form-row form-row-wide">
-                                                        <input type="password" class="input-text"
-                                                            placeholder="Password">
-                                                    </p>
-                                                    <p class="form-row">
-                                                        <input type="submit" class="button" value="Register">
-                                                    </p>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {% else %}
+                                <a href="#" data-ysera="ysera-dropdown">
+                                    <span class="flaticon-user"></span>
+                                </a>
+                                {% endif %}
                             </div>
                             <a class="menu-bar mobile-navigation menu-toggle" href="#">
                                 <span></span>
@@ -614,6 +610,27 @@
     <script src="{% static "js/jquery.scrollbar.min.js" %}"></script>
     <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
     <script src="{% static "js/frontend-plugin.js" %}"></script>
+    <script>
+        window.addEventListener("load", function () {
+            const loader = document.getElementById("page-loader");
+
+            // fade out
+            loader.classList.add("hide");
+
+            // fully remove after animation
+            setTimeout(() => {
+                loader.style.display = "none";
+            }, 700);
+        });
+
+        function goToCategory(category) {
+            if (!category) return;
+
+            const baseUrl = `{% url "search" s='0' page='1' %}`;
+            window.location.href = `${baseUrl}?q=${encodeURIComponent(category)}`;
+        }
+    </script>
+
 </body>
 
 </html>

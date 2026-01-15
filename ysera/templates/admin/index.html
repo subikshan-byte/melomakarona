@@ -1,0 +1,67 @@
+{% extends "admin/index.html" %}
+{% load static %}
+{% block content %}
+
+<!-- KPI CARDS -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:30px;">
+    <div class="kpi">💰 Revenue<br><b id="rev">0</b></div>
+    <div class="kpi">📦 Orders<br><b id="orders">0</b></div>
+    <div class="kpi">💎 Products<br><b id="products">0</b></div>
+    <div class="kpi">🗂 Categories<br><b id="categories">0</b></div>
+</div>
+
+<!-- DAILY SALES -->
+<div class="card">
+    <h2>📈 Daily Sales</h2>
+    <canvas id="dailyChart" height="120"></canvas>
+</div>
+
+<!-- BOTTOM CHARTS -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px;">
+    <div class="card">
+        <h2>📦 Category Sales</h2>
+        <canvas id="categoryChart"></canvas>
+    </div>
+    <div class="card">
+        <h2>💎 Top Products</h2>
+        <canvas id="productChart"></canvas>
+    </div>
+</div>
+
+{{ block.super }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<script>
+fetch("/admin/analytics/dashboard/").then(r=>r.json()).then(d=>{
+    document.getElementById("rev").innerText = "₹"+d.kpi.revenue;
+    document.getElementById("orders").innerText = d.kpi.orders;
+    document.getElementById("products").innerText = d.kpi.products;
+    document.getElementById("categories").innerText = d.kpi.categories;
+
+    new Chart(dailyChart,{
+        type:"line",
+        data:{labels:d.daily.labels,datasets:[{
+            data:d.daily.values,
+            borderColor:"#d4af37",
+            tension:0.4,
+            fill:true
+        }]}
+    });
+});
+
+fetch("/admin/analytics/category-sales/").then(r=>r.json()).then(d=>{
+    new Chart(categoryChart,{type:"bar",data:{labels:d.labels,datasets:[{data:d.values,backgroundColor:"#22c55e"}]}});
+});
+
+fetch("/admin/analytics/product-sales/").then(r=>r.json()).then(d=>{
+    new Chart(productChart,{type:"bar",data:{labels:d.labels,datasets:[{data:d.values,backgroundColor:"#3b82f6"}]}});
+});
+</script>
+
+<style>
+.kpi,.card{background:#0f0f0f;color:#fff;padding:20px;border-radius:16px}
+.kpi b{font-size:24px;color:#d4af37}
+</style>
+
+{% endblock %}

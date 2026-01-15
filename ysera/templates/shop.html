@@ -93,13 +93,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="content-area shop-grid-content full-width col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="content-area shop-grid-content full-width col-lg-12 col-md-12 col-sm-12 col-xs-12" >
                 <div class="site-main">
                     <div class="banner-shop banner-slider owl-slick equal-container"
                          data-slick='{"autoplay":true, "autoplaySpeed":10000, "arrows":false, "dots":true, "infinite":true, "speed":800, "rows":1}'>
                         {% for offer in offers %}
-                        <div class="item-banner style1">
-                            <div class="inner equal-element">
+                        <div class="item-banner style1" >
+                            <div class="inner equal-element" style="background-image:url({{offer.image.url}})">
                                 <div class="banner-content style1">
                                     <h4 class="ysera-subtitle">{{offer.descripton}}</h4>
                                     <h3 class="title">{{offer.title}}<br/> {{offer.offers}}</h3>

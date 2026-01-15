@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -127,3 +128,36 @@ STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+JAZZMIN_SETTINGS = {
+    "site_title": "Aurum Jewels Admin",
+    "site_header": "Aurum Jewels",
+    "site_brand": "Aurum Jewels",
+    "welcome_sign": "Luxury Jewellery Management",
+    "copyright": "© 2026 Aurum Jewels",
+
+    # 🎨 Luxury Colors
+    "theme": "luxury",
+
+    # Sidebar
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    # Top Menu
+    "topmenu_links": [
+        {"name": "Store", "url": "/", "new_window": True},
+    ],
+
+    # Icons (Luxury Feel)
+    "icons": {
+        "auth.User": "fas fa-user-circle",
+        "auth.Group": "fas fa-users",
+        "store.Product": "fas fa-gem",
+        "store.Category": "fas fa-ring",
+        "store.Order": "fas fa-shopping-bag",
+        "store.Review": "fas fa-star",
+    },
+
+    # UI Enhancements
+    "changeform_format": "horizontal_tabs",
+    "show_ui_builder": False,
+}

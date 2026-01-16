@@ -91,17 +91,24 @@
                                                 Size Chart</a>
                                         </div>
                                     </div>
+                                    {% if product.stock_status == "out of stock" %}
+                                    <p style="color:red">not avaialable</p>
+                                    {% else %}
+                                    <form method="POST" id="productForm">
+                                    {% csrf_token %}
                                     <div class="quantity-add-to-cart">
                                         <div class="quantity">
                                             <div class="control">
                                                 <a class="btn-number qtyminus quantity-minus" href="#">-</a>
-                                                <input type="text" data-step="1" data-min="0" value="1" title="Qty"
-                                                    class="input-qty qty" size="4">
+                                                <input type="number" data-step="1" data-min="0" value="1" title="Qty"
+                                                    class="input-qty qty" name="quantity" size="4">
                                                 <a href="#" class="btn-number qtyplus quantity-plus">+</a>
                                             </div>
                                         </div>
-                                        <button class="single_add_to_cart_button button">Add to cart</button>
+                                        <button class="single_add_to_cart_button button" type="submit" formaction="{% url 'add to cart' product_id=product.slug %}" >Add to cart</button>
                                     </div>
+                                    </form>
+                                    {% endif %}
                                     <!-- Rental Section -->
                                      {% if product.stock_status == "out of stock" %}
                                 </br>

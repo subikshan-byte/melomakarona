@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "tharatrinket.com",
-    "www.tharatrinket.com",
+    "www.tharatrinket.com","*"
 ]
 
 

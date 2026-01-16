@@ -9,5 +9,6 @@ urlpatterns = [
     path('login',viewlogin.login_view,name="login"),
      path("logout/", viewlogin.logout_view, name="logout"),
      path('signup/', viewlogin.signup_view, name='signup'),
-     path("cart",viewcart.cart,name="cart"),]
+     path("cart",viewcart.cart,name="cart"),
+     path('cart/add/<slug:product_id>/', viewcart.add_to_cart, name='add to cart'),]
 

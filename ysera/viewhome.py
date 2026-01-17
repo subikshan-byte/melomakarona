@@ -63,19 +63,10 @@ def home(request):
         log='1'
     else:
         cart, created = Cart.objects.get_or_create(user=request.user)
-        cart_items = CartItem.objects.filter(cart=cart)
+        cart_items = CartItem.objects.filter(cart=cart).count
 
         
-        for item in cart_items:
-            product = item.product
-            # attach quantity and subtotal
-            price+=item.quantity*product.price
-            product.quantity_in_cart = item.quantity
-            product.subtotal_in_cart = item.subtotal()
-            # attach first image url (or None if no image)
-            first_image = product.productimage_set.first()
-            product.image_url = first_image.image.url if first_image else ""
-            products.append(product)
+        
     # ------------------ CONTEXT ------------------
     
     context = {
@@ -86,7 +77,7 @@ def home(request):
         'bridalsets':bridalsets_product_data,
         "is_logged_in": request.user.is_authenticated,
         "user": request.user if request.user.is_authenticated else None,
-        "cart":products,
+        "cart": cart_items,
         "price":price,
         "log":log,
         "offers_1": offers_1,

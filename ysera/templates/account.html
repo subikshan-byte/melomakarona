@@ -1,0 +1,811 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Account{% endblock title %}
+{% block index %}
+    <style>
+        /* Account Page Styles */
+        #account-page {
+            font-family: 'Raleway', sans-serif;
+            background-color: #ffff;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        
+        #account-page .account-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        #account-page .account-header {
+            background-color: #c09578;
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+            border-radius: 10px;
+        }
+        
+        #account-page .account-header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        #account-page .account-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        #account-page .account-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 992px) {
+            #account-page .account-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        #account-page .profile-section, 
+        #account-page .orders-section,
+        #account-page .faq-section {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        #account-page .section-header {
+            background-color: #c09578;
+            color: #fff;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #account-page .section-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+            margin: 0;
+        }
+        
+        #account-page .edit-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        #account-page .edit-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        #account-page .profile-details {
+            padding: 30px;
+        }
+        
+        #account-page .profile-field {
+            margin-bottom: 25px;
+        }
+        
+        #account-page .profile-field label {
+            display: block;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        #account-page .profile-field input, 
+        #account-page .profile-field textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        #account-page .profile-field input:focus, 
+        #account-page .profile-field textarea:focus {
+            border-color: #c09578;
+            outline: none;
+        }
+        
+        #account-page .profile-field input:disabled, 
+        #account-page .profile-field textarea:disabled {
+            background-color: #f9f9f9;
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        #account-page .profile-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        #account-page .save-btn, 
+        #account-page .cancel-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #account-page .save-btn {
+            background-color: #c09578;
+            color: #fff;
+        }
+        
+        #account-page .save-btn:hover {
+            background-color: #a87f64;
+        }
+        
+        #account-page .cancel-btn {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+        
+        #account-page .cancel-btn:hover {
+            background-color: #e1e1e1;
+        }
+        
+        #account-page .hidden {
+            display: none;
+        }
+        
+        /* Orders Section */
+        #account-page .orders-list {
+            padding: 0;
+        }
+        
+        #account-page .order-item {
+            border-bottom: 1px solid #eee;
+            padding: 25px 30px;
+        }
+        
+        #account-page .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        #account-page .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        
+        #account-page .order-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+        
+        #account-page .order-header span {
+            color: #c09578;
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+        
+        #account-page .order-header.active span {
+            transform: rotate(180deg);
+        }
+        
+        #account-page .order-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        #account-page .order-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        #account-page .order-details.active {
+            max-height: 800px;
+        }
+        
+        #account-page .order-items {
+            margin-bottom: 20px;
+        }
+        
+        #account-page .order-product {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        #account-page .order-product:last-child {
+            border-bottom: none;
+        }
+        
+        #account-page .product-image {
+            width: 70px;
+            height: 70px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c09578;
+            font-size: 24px;
+        }
+        
+        #account-page .product-info {
+            flex-grow: 1;
+        }
+        
+        #account-page .product-info h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        #account-page .product-meta {
+            display: flex;
+            font-size: 13px;
+            color: #888;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        #account-page .product-price {
+            font-weight: 700;
+            color: #333;
+        }
+        
+        #account-page .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        #account-page .status-delivered, 
+        #account-page .status-completed {
+            background-color: #e6f7ee;
+            color: #00a859;
+        }
+        
+        #account-page .status-processing, 
+        #account-page .status-active {
+            background-color: #e6f2ff;
+            color: #0066cc;
+        }
+        
+        #account-page .status-pending {
+            background-color: #fff8e6;
+            color: #ff9900;
+        }
+        
+        #account-page .status-returned {
+            background-color: #ffe6e6;
+            color: #ff3333;
+        }
+        
+        #account-page .no-orders {
+            text-align: center;
+            padding: 50px 20px;
+            color: #888;
+        }
+        
+        #account-page .no-orders i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+        
+        #account-page .no-orders h3 {
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        /* Ysera Countdown Style */
+        #account-page .ysera-countdown .box-count {
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            padding: 7px 0;
+            min-width: 40px;
+            border-radius: 50%;
+            margin-bottom: 7px;
+            font-family: 'Raleway';
+            font-weight: 700;
+            margin-right: 10px;
+            position: relative;
+            background-color: #c09578;
+            color: #fff;
+        }
+        
+        #account-page .ysera-countdown .box-count:last-child {
+            margin-right: 0;
+        }
+        
+        #account-page .ysera-countdown .box-count span {
+            display: block;
+            text-align: center;
+            line-height: 12px;
+        }
+        
+        #account-page .ysera-countdown .box-count .number {
+            font-size: 11px;
+            line-height: 11px;
+            padding-bottom: 3px;
+        }
+        
+        #account-page .ysera-countdown .box-count .text {
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+        
+        /* FAQ Section */
+        #account-page .faq-section {
+            grid-column: 1 / -1;
+            margin-top: 20px;
+        }
+        
+        #account-page .faq-content {
+            padding: 30px;
+        }
+        
+        #account-page .faq-item {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 0;
+        }
+        
+        #account-page .faq-item:last-child {
+            border-bottom: none;
+        }
+        
+        #account-page .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 20px 0;
+            transition: all 0.3s;
+        }
+        
+        #account-page .faq-question:hover {
+            background-color: #f9f9f9;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin: 0 -10px;
+            border-radius: 4px;
+        }
+        
+        #account-page .faq-question h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+            flex-grow: 1;
+        }
+        
+        #account-page .faq-toggle {
+            color: #c09578;
+            font-size: 18px;
+            transition: transform 0.3s;
+            margin-left: 15px;
+        }
+        
+        #account-page .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+        
+        #account-page .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            padding: 0;
+        }
+        
+        #account-page .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 0 20px 0;
+        }
+        
+        #account-page .faq-answer p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        #account-page .faq-answer ul {
+            margin-left: 20px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        #account-page .faq-answer li {
+            margin-bottom: 8px;
+        }
+    </style>
+    <!-- Account Page Content -->
+    <div id="account-page">
+        <div class="account-container">
+            <div class="account-header">
+                <h1>My Account</h1>
+                <p>Manage your profile and track your orders</p>
+            </div>
+            
+            <div class="account-content">
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2>Profile Information</h2>
+                        <button class="edit-btn" id="editProfileBtn">
+                            <i class="fa fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <form id="profileForm" method="POST" action="{% url 'edit' %}">
+                            {% csrf_token %}
+                
+                            <div class="profile-field">
+                                <label for="fullname">Full Name</label>
+                                <input type="text"  name="name" id="fullname" value="{{request.user.first_name}}" disabled>
+                            </div>
+                            
+                            <div class="profile-field">
+                                <label for="email">Email Address</label>
+                                <input type="email" name="email" id="email" value="{{request.user.email}}" disabled>
+                            </div>
+                            
+                            <div class="profile-field">
+                                <label for="phone">Contact Number</label>
+                                <input type="tel"  name="mobile" id="phone" value="+91 {{profile.mobile}}" disabled>
+                            </div>
+                            
+                            <div class="profile-field">
+                                <label for="address">Address</label>
+                                <textarea id="address" name="address" rows="3" disabled>{{profile.address}}</textarea>
+                            </div>
+                            
+                            <div class="profile-field">
+                                <label for="pincode">Pincode/ZIP</label>
+                                <input type="text" name="zipcode" id="pincode" value="{{profile.zip_code}}" disabled>
+                            </div>
+                            
+                            <div class="profile-actions hidden" id="profileActions">
+                                <button type="button" class="cancel-btn" id="cancelEditBtn">Cancel</button>
+                                <button type="submit" class="save-btn">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Orders Section -->
+                <div class="orders-section">
+                    <div class="section-header">
+                        <h2>Order History</h2>
+                        <div class="ysera-countdown">
+                            <div class="box-count">
+                                <span class="number">5</span>
+                                <span class="text">Orders</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="orders-list" id="ordersList">
+                        <!-- Orders will be loaded here via JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- FAQ Section -->
+                <div class="faq-section">
+                    <div class="section-header">
+                        <h2>Frequently Asked Questions</h2>
+                    </div>
+                    
+                    <div class="faq-content">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>How do I return a product?</h3>
+                                <span class="faq-toggle"><i class="fa fa-chevron-down"></i></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>To initiate a return or refund, please visit our Contact page and submit a request with the subject line "Refund/Return." Include all necessary details about your order. Our customer service team will contact you to process your request and guide you through the return procedure.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>Can I rent jewellery instead of buying?</h3>
+                                <span class="faq-toggle"><i class="fa fa-chevron-down"></i></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Yes, we offer rental options for select jewellery pieces. However, our rental service is currently available only in specific areas. During checkout, please verify if your pincode is eligible for jewellery rental. The availability will be confirmed based on your delivery location.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>Does your shop have a physical store?</h3>
+                                <span class="faq-toggle"><i class="fa fa-chevron-down"></i></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>No, we currently operate exclusively as an online store. We do not have a physical retail location. All our jewellery is available for purchase through our website with nationwide delivery across India.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>Where are your jewellery pieces made?</h3>
+                                <span class="faq-toggle"><i class="fa fa-chevron-down"></i></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Our jewellery is crafted in Erode, Tamil Nadu, which serves as our production base and origin. We specialize in traditional Indian jewellery craftsmanship, combining skilled artistry with quality materials to create beautiful pieces.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>What is your shipping policy?</h3>
+                                <span class="faq-toggle"><i class="fa fa-chevron-down"></i></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>We offer standard shipping across India with delivery typically within 5-7 business days. Express shipping options are available for select locations. Shipping charges vary based on your location and order value. All orders include insurance and secure packaging.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <h3>How do I care for my jewellery?</h3>
+                                <span class="faq-toggle"><i class="fa fa-chevron-down"></i></span>
+                            </div>
+                            <div class="faq-answer">
+                                <p>To maintain the beauty of your jewellery:</p>
+                                <ul>
+                                    <li>Store pieces separately in soft pouches to prevent scratches</li>
+                                    <li>Avoid contact with water, perfume, and chemicals</li>
+                                    <li>Clean with a soft, dry cloth after each use</li>
+                                    <li>Remove jewellery before swimming, bathing, or exercising</li>
+                                    <li>For intricate pieces, use a soft brush for cleaning</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Sample order data
+        const orders = [
+        {% if cart1 %}
+            {
+                id: "YS-2023-001",
+                date: "2023-10-15",
+                status: "delivered",
+                type: "bought",
+                items: [
+                    { name: "Diamond Eternity Ring", qty: 1, price: "$1,250", rental: false },
+                    { name: "Pearl Drop Earrings", qty: 1, price: "$450", rental: false }
+                ],
+                total: "$1,700"
+            },
+            {% endif %}
+        ];
+        
+        // DOM elements - scoped to account page
+        const accountPage = document.getElementById('account-page');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const cancelEditBtn = document.getElementById('cancelEditBtn');
+        const profileForm = document.getElementById('profileForm');
+        const profileActions = document.getElementById('profileActions');
+        const ordersList = document.getElementById('ordersList');
+        const formInputs = profileForm.querySelectorAll('input, textarea');
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderOrders();
+            initFAQ();
+            
+            // Add event listeners
+            editProfileBtn.addEventListener('click', enableEditing);
+            cancelEditBtn.addEventListener('click', disableEditing);
+            profileForm.addEventListener('submit', saveProfile);
+        });
+        
+        // Enable editing of profile
+        function enableEditing() {
+            formInputs.forEach(input => {
+                input.disabled = false;
+            });
+            profileActions.classList.remove('hidden');
+            editProfileBtn.classList.add('hidden');
+        }
+        
+        // Disable editing of profile
+        function disableEditing() {
+            formInputs.forEach(input => {
+                input.disabled = true;
+            });
+            profileActions.classList.add('hidden');
+            editProfileBtn.classList.remove('hidden');
+            
+            // Reset form values to original
+            document.getElementById('username').value = 'serena_jewel';
+            document.getElementById('fullname').value = 'Serena Williams';
+            document.getElementById('email').value = 'serena@example.com';
+            document.getElementById('phone').value = '+1 (555) 123-4567';
+            document.getElementById('address').value = '123 Jewel Street, Diamond District, New York, NY 10001';
+            document.getElementById('pincode').value = '10001';
+        }
+        
+        // Save profile changes
+        function saveProfile(e) {
+            e.preventDefault();
+            
+            // In a real application, you would send this data to a server
+            alert('Profile updated successfully!');
+            disableEditing();
+            
+            // Show a confirmation message
+            const originalText = editProfileBtn.innerHTML;
+            editProfileBtn.innerHTML = '<i class="fa fa-check"></i> Updated!';
+            editProfileBtn.style.backgroundColor = '#00a859';
+            
+            setTimeout(() => {
+                editProfileBtn.innerHTML = originalText;
+                editProfileBtn.style.backgroundColor = '';
+            }, 2000);
+        }
+        
+        // Render orders
+        function renderOrders() {
+            if (orders.length === 0) {
+                ordersList.innerHTML = `
+                    <div class="no-orders">
+                        <i class="fa fa-clipboard"></i>
+                        <h3>No Orders Yet</h3>
+                        <p>You haven't placed any orders yet. Start shopping to see your order history here.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            ordersList.innerHTML = '';
+            
+            orders.forEach(order => {
+                const orderElement = document.createElement('div');
+                orderElement.className = 'order-item';
+                orderElement.innerHTML = `
+                    <div class="order-header">
+                        <h3>Order #${order.id}</h3>
+                        <span><i class="fa fa-chevron-down"></i></span>
+                    </div>
+                    <div class="order-summary">
+                        <div>
+                            <strong>Date:</strong> ${formatDate(order.date)}
+                        </div>
+                        <div>
+                            <strong>Type:</strong> ${order.type === 'rental' ? 'Rental' : 'Purchase'}
+                        </div>
+                        <div>
+                            <strong>Total:</strong> ${order.total}
+                        </div>
+                        <div class="status-badge status-${order.status}">
+                            ${getStatusText(order.status, order.type)}
+                        </div>
+                    </div>
+                    <div class="order-details">
+                        <div class="order-items">
+                            ${renderOrderItems(order.items)}
+                        </div>
+                        <div class="order-summary">
+                            <div><strong>Items:</strong> ${order.items.length}</div>
+                            <div><strong>Order Total:</strong> ${order.total}</div>
+                        </div>
+                    </div>
+                `;
+                
+                ordersList.appendChild(orderElement);
+                
+                // Add click event to toggle order details
+                const orderHeader = orderElement.querySelector('.order-header');
+                const orderDetails = orderElement.querySelector('.order-details');
+                
+                orderHeader.addEventListener('click', () => {
+                    orderHeader.classList.toggle('active');
+                    orderDetails.classList.toggle('active');
+                });
+            });
+        }
+        
+        // Render order items
+        function renderOrderItems(items) {
+            return items.map(item => `
+                <div class="order-product">
+                    <div class="product-image">
+                        <i class="fa fa-gem"></i>
+                    </div>
+                    <div class="product-info">
+                        <h4>${item.name}</h4>
+                        <div class="product-meta">
+                            <span><strong>Qty:</strong> ${item.qty}</span>
+                            <span><strong>Price:</strong> ${item.price}</span>
+                            ${item.rental ? `<span><strong>Rental Period:</strong> ${item.rentalPeriod}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+        
+        // Get status text based on status and type
+        function getStatusText(status, type) {
+            const statusMap = {
+                'delivered': 'Delivered',
+                'processing': type === 'rental' ? 'Processing Rental' : 'Processing',
+                'completed': 'Completed',
+                'active': 'Active Rental',
+                'returned': 'Returned',
+                'pending': 'Pending'
+            };
+            
+            return statusMap[status] || status;
+        }
+        
+        // FAQ functionality
+        function initFAQ() {
+            const faqItems = document.querySelectorAll('#account-page .faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    // Close all other FAQ items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+        }
+    </script>
+{% endblock index %}
